@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Te Amo</title>
+
+  <!-- Fuente romántica -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      height: 100vh;
+      font-family: 'Great Vibes', cursive;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    /* Estrellas */
+    .stars {
+      width: 2px;
+      height: 2px;
+      background: white;
+      position: absolute;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Movimiento en profundidad con fade */
+    @keyframes flyTowards {
+      0% {
+        opacity: 0.1;
+        transform: translateZ(-1000px) scale(0.2);
+      }
+      50% {
+        opacity: 1;
+        transform: translateZ(-300px) scale(1.0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateZ(300px) scale(2);
+      }
+    }
+
+    .floating {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: flyTowards 3.5s ease-out forwards;
+      transform-style: preserve-3d;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .container {
+        text-align: center;
+        color: white;
+        max-width: 100%;
+        margin-left: 0%;
+        margin-right: 0%;
+    }
+
+    .audio-button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    .audio-controls {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .audio-button:hover {
+        background: #2980b9;
+    }
+
+    .color1 { color: #ff4da6; }
+    .color2 { color: #9b59b6; }
+    .color3 { color: #f1c40f; }
+    .color4 { color: #e67e22; }
+    .color5 { color: #d5bebc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="audio-controls">
+      <button class="audio-button" onclick="toggleAudio()">Para ti !</button>
+  </div>
+  <audio id="bgMusic" loop>
+      <source src="ConjuntoPrimavera_UnaVezMas.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+  </audio>
+  </div>
+
+  <script>
+    const frases = [
+      "Feliz Cumpleaños", "Que tu sonrisa hoy brille más que nunca", "Eres un regalo para el mundo, ¡feliz cumpleaños!",
+      "Hoy celebro tu vida, que es mi alegría","Gracias por existir, feliz vuelta al sol","Tu luz hace más bonito el universo",
+      "Que la vida te abrace como tú me abrazas a mí","Tu presencia es mi mejor regalo","Hoy el mundo celebra a alguien increíble: tú",
+      "Eres super increíble", "Que nunca te falte amor, ni motivos para sonreír", "Que cada año te acerque más a tu mejor versión", 
+      "Tú el cielo mas bonito que he visto","Que este año te regale nuevas aventuras","Tu esencia es magia, nunca lo olvides",
+      "Eres muy especial", "Siempre estaré aquí para ti",
+    ];
+
+    const colores = ['color1', 'color2', 'color3', 'color4', 'color5'];
+
+    // Estrellas
+    function generarEstrellas(num) {
+      for (let i = 0; i < num; i++) {
+        const star = document.createElement('div');
+        star.classList.add('stars');
+        star.style.left = `${Math.random() * window.innerWidth}px`;
+        star.style.top = `${Math.random() * window.innerHeight}px`;
+        star.style.animationDuration = `${1 + Math.random() * 2}s`;
+        document.body.appendChild(star);
+      }
+    }
+    
+    // Frases flotantes
+    function lanzarFrase() {
+      const frase = document.createElement('div');
+      frase.className = `floating ${colores[Math.floor(Math.random() * colores.length)]}`;
+      frase.innerText = frases[Math.floor(Math.random() * frases.length)];
+
+      // Posición aleatoria
+      frase.style.left = `${Math.random() * 100}%`;
+      frase.style.top = `${Math.random() * 100}%`;
+
+      document.body.appendChild(frase);
+      setTimeout(() => frase.remove(), 8000);
+    }
+
+    // Imágenes flotantes
+    const rutasImagenes = [
+      "xoch1.jpg",
+      "xoch2.jpg",
+      "xoch3.jpg",
+      "xoch4.jpg",
+      "xoch5.jpg"
+    ];
+
+    function lanzarImagen() {
+      if (rutasImagenes.length === 0) return;
+
+      const img = document.createElement('img');
+      img.src = rutasImagenes[Math.floor(Math.random() * rutasImagenes.length)];
+      img.className = 'floating';
+      img.style.width = '200px';
+      img.style.height = '200px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '12px';
+      img.style.left = `${Math.random() * 100}%`;
+      img.style.top = `${Math.random() * 100}%`;
+
+      document.body.appendChild(img);
+      setTimeout(() => img.remove(), 4000);
+    }
+
+    // Audio Control
+      const audio = document.getElementById('bgMusic');
+      let isPlaying = false;
+
+      function toggleAudio() {
+          if (isPlaying) {
+              audio.pause();
+              isPlaying = false;
+          } else {
+              audio.play().then(() => {
+                  isPlaying = true;
+              }).catch(e => {
+                  console.log('Audio playback failed:', e);
+                  alert('Please ensure the audio file is correctly placed and try again.');
+              });
+          }
+      }
+
+      // Attempt autoplay with fallback
+      audio.play().then(() => {
+          isPlaying = true;
+      }).catch(e => {
+          console.log('Autoplay prevented:', e);
+          // Rely on manual play button
+      });
+
+    // Lanzamiento de contenido
+    generarEstrellas(150);
+    setInterval(lanzarFrase, 3000);//Tiempo para que cada frase aparezca
+    setInterval(lanzarImagen, 4000);
+  </script>
+</body>
+</html>
+
+
